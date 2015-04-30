@@ -18,12 +18,13 @@ namespace :election do
     DataHygiene::FuturePolicyTaggingMigrator.new(edition_scope, Logger.new(STDOUT)).migrate!
   end
 
-  desc "Will register redirects for all policies based on the information in data/policy_redircts.csv"
+  desc "Will register redirects for all policies and remove them from rummager based on the information in data/policy_redircts.csv"
   task :redirect_policies do
     require 'gds_api/router'
     require 'csv'
 
     router = GdsApi::Router.new(Plek.find('router-api'))
+    rummager_index = Rummageable::Index.new(Plek.find('search'), '/government', logger: Rails.logger)
 
     CSV.foreach(Rails.root.join('data/policy_redirects.csv'), headers: true) do |row|
       source, destination = row['source'], row['destination']
@@ -35,6 +36,8 @@ namespace :election do
         puts "Redirecting #{source} to #{destination}"
         router.add_redirect_route(source, :exact, destination)
       end
+
+      rummager_index.delete(source)
     end
 
     router.commit_routes
