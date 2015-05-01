@@ -1,5 +1,5 @@
 desc "Generates and emails CSV reports of all public documents containing broken links."
-task :generate_broken_link_reports, [:reports_dir, :email_address] => [:environment] do |_, args|
+task :generate_broken_link_reports => :environment do
   begin
     reports_dir     = args[:reports_dir]
     email_address   = args[:email_address]
