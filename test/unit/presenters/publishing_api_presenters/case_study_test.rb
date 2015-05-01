@@ -183,8 +183,6 @@ class PublishingApiPresenters::CaseStudyTest < ActiveSupport::TestCase
 
   test 'links hash includes future-policies when flag is on' do
     stub_content_register_policies
-    FeatureFlag.find_or_create_by(key: 'future_policies')
-    FeatureFlag.set('future_policies', true)
 
     case_study = create(:published_case_study, policy_content_ids: [policy_1["content_id"]])
     presented_hash = present(case_study)

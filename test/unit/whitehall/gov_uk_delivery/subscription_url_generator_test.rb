@@ -415,9 +415,6 @@ class Whitehall::GovUkDelivery::SubscriptionUrlGeneratorTest < ActiveSupport::Te
     policy = create(:published_policy)
     @edition = create(:news_article, related_policy_ids: [policy])
 
-    FeatureFlag.find_or_create_by(key: 'future_policies')
-    FeatureFlag.set('future_policies', true)
-
     refute urls_for(@edition).any? { |feed_url| feed_url =~ /policies/ }
   end
 
@@ -437,9 +434,6 @@ class Whitehall::GovUkDelivery::SubscriptionUrlGeneratorTest < ActiveSupport::Te
       topical_events: [topical_event],
       world_locations: [world_location]
     )
-
-    FeatureFlag.find_or_create_by(key: 'future_policies')
-    FeatureFlag.set('future_policies', true)
 
     refute urls_for(@edition).any? { |feed_url| feed_url =~ /policies/ }
     refute urls_for(@edition).any? { |feed_url| feed_url =~ /relevant_to_local_government/ }

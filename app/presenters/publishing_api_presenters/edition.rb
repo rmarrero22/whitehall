@@ -56,11 +56,7 @@ module PublishingApiPresenters
     end
 
     def policies
-      if FeatureFlag.enabled?('future_policies')
-        edition.policies.map(&:slug)
-      else
-        []
-      end
+      edition.policies.map(&:slug)
     end
 
     def default_update_type
